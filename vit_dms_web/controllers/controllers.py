@@ -42,6 +42,7 @@ class VitDmsWeb(http.Controller):
                 'id': dir['id'] + 1000,
                 'name': dir['name'],
                 'state': 'closed',
+                'file_state': '',
                 'parentId': str(directory_id),
                 'type': 'directory',
                 'size' : dir['size']
@@ -51,6 +52,7 @@ class VitDmsWeb(http.Controller):
                 'id': str(file['id']),
                 'name': file['name'],
                 'state': 'open',
+                'file_state': file['state'],
                 'parentId': str(directory_id),
                 'type': 'file',
                 'size' : file['size']
@@ -73,15 +75,15 @@ class VitDmsWeb(http.Controller):
         isNewRecord = kw.get('isNewRecord')
         ulas = kw.get('ulas')
         name = kw.get('name')
-        tanggal_jam = str(kw.get('tanggal_jam')) # merubah tanggal jadi str
-        tanggal_jam = datetime.datetime.strptime(tanggal_jam[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
+        # tanggal_jam = str(kw.get('tanggal_jam')) # merubah tanggal jadi str
+        # tanggal_jam = datetime.datetime.strptime(tanggal_jam[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         redaksi_asal = kw.get('redaksi_asal')
 
         data = {
             'file_id':file_id,
             'ulas': ulas,
             'name': name,
-            'tanggal_jam': tanggal_jam,
+            # 'tanggal_jam': tanggal_jam, # default
             'redaksi_asal': redaksi_asal
         }
         new_id = http.request.env['muk_dms.review'].create(data)
@@ -94,20 +96,45 @@ class VitDmsWeb(http.Controller):
         isNewRecord = kw.get('isNewRecord')
         ulas = kw.get('ulas')
         name = kw.get('name')
-        tanggal_jam = str(kw.get('tanggal_jam')) # merubah tanggal jadi str
-        tanggal_jam = datetime.datetime.strptime(tanggal_jam[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
+        # tanggal_jam = str(kw.get('tanggal_jam')) # merubah tanggal jadi str
+        # tanggal_jam = datetime.datetime.strptime(tanggal_jam[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         redaksi_asal = kw.get('redaksi_asal')
         id = kw.get('id')
 
         data = {
             'ulas': ulas,
             'name': name,
-            'tanggal_jam': tanggal_jam,
+            # 'tanggal_jam': tanggal_jam,
             'redaksi_asal': redaksi_asal
         }
         updated_id = http.request.env['muk_dms.review'].browse(int(id)).write(data)
         data.update({'id':updated_id})
         return simplejson.dumps(data)
+
+    @http.route('/vit_dms_web/reviews/done/<int:file_id>', auth='public', csrf=False)
+    def review_done(self, file_id, **kw):
+        print kw
+
+        user_id = http.request.env.user.id
+        print user_id
+
+        #### update state semua review user ini
+        reviews = http.request.env['muk_dms.review'].search([('file_id','=',file_id),('user_id','=',user_id)])
+        for rev in reviews:
+            rev.state = 'done'
+
+
+        ### cek jika semua reviews state == done , maka file state = done
+        reviews = http.request.env['muk_dms.review'].search([('file_id', '=', file_id)])
+        file_state = 'done'
+        for rev in reviews:
+            if rev.state != 'done':
+                file_state = 'progress'
+                break
+
+        http.request.env['muk_dms.file'].browse(file_id).state=file_state
+
+        return simplejson.dumps({'success': True})
 
     @http.route('/vit_dms_web/reviews/delete/<int:file_id>', auth='public', csrf=False)
     def review_delete(self, **kw):
@@ -150,14 +177,14 @@ class VitDmsWeb(http.Controller):
         print kw
         isNewRecord = kw.get('isNewRecord')
         name = kw.get('name')
-        tanggal_naskah = str(kw.get('tanggal_naskah')) # merubah tanggal jadi str
-        tanggal_naskah = datetime.datetime.strptime(tanggal_naskah[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
+        # tanggal_naskah = str(kw.get('tanggal_naskah')) # merubah tanggal jadi str
+        # tanggal_naskah = datetime.datetime.strptime(tanggal_naskah[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         partner = kw.get('partner')
         deskripsi = kw.get('deskripsi')
         id = kw.get('id')
 
         data = {
-            'tanggal_naskah': tanggal_naskah,
+            # 'tanggal_naskah': tanggal_naskah,
             'name': name,
             'partner': partner,
             'deskripsi': deskripsi
