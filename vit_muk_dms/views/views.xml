@@ -31,7 +31,13 @@
 				</xpath>
 				<xpath expr="//notebook[last()]" position="inside">
 					<page string="Reviewer">
-						<field name="reviewer_ids"/>
+						<field name="reviewer_ids">
+							<tree string="Reviewers">
+								<field name="name"/>
+								<field name="state"/>
+
+							</tree>
+						</field>
 					</page>
 				</xpath>
 				<xpath expr="//notebook[last()]" position="inside">

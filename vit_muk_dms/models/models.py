@@ -45,7 +45,7 @@ class muk_dms_reviewer(models.Model):
 
 	name = fields.Many2one(comodel_name="res.users", string="User", required=False,
 							default=lambda self: self.env.user.id)
-	file_id = fields.Many2one(comodel_name='muk_dms.file', string='Reviewer')
+	file_id = fields.Many2one(comodel_name='muk_dms.file', string='File')
 	state = fields.Char(string="State", compute="_get_state")
 
 	@api.depends('file_id')

@@ -7,7 +7,7 @@ import datetime
 
 class VitDmsWeb(http.Controller):
 
-    @http.route('/vit_dms_web/index', auth='public',website=True)
+    @http.route('/vit_dms_web/index', auth='user',website=True)
     def index(self, **kw):
         return http.request.render('vit_dms_web.index', {
         })
@@ -65,7 +65,8 @@ class VitDmsWeb(http.Controller):
     @http.route('/vit_dms_web/reviews/read/<int:file_id>', auth='public', csrf=False)
     def review_read(self, file_id, **kw):
         reviews=[]
-        domain=[('file_id','=', file_id)]
+        user_id = http.request.env.user.id
+        domain=[('file_id','=', file_id),('user_id','=',user_id)]
         reviews = http.request.env['muk_dms.review'].search_read(domain)
         return simplejson.dumps(reviews)
 
