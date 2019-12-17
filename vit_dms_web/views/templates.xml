@@ -37,14 +37,13 @@
                                 <tr>
                                     <th data-options="field:'name'" width="220">Name</th>
                                     <th data-options="field:'size'" width="100" align="right">Size</th>
-                                    <th data-options="field:'date'" width="150">State</th>
+                                    <th data-options="field:'state'" width="150">State</th>
                                 </tr>
                             </thead>
                         </table>
              <script>
                  function onClickRow(node){
-                    var src = '/vit_dms_web/static/src/js/ViewerJS/index.html#/web/content?model=muk_dms.file&amp;field=content&amp;id=' + node.id ;
-                    $('#viewer').attr('src', src);
+                     
                     $('iframe').each(function() {
                       this.contentWindow.location.reload(true);
                     });
@@ -64,6 +63,9 @@
                     $('#dg_reviewer').datagrid({
                         url: '/vit_dms_web/reviewers/read/' + node.id
                     });
+
+                    var src = '/vit_dms_web/static/src/js/ViewerJS/index.html#/web/content?model=muk_dms.file&amp;field=content&amp;id=' + node.id ;
+                    $('#viewer').attr('src', src);
                  }
              </script>
          </template>

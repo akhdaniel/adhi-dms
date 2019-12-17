@@ -2,6 +2,9 @@
 from odoo import http
 import simplejson
 
+from datetime import date, datetime
+import datetime
+
 class VitDmsWeb(http.Controller):
 
     @http.route('/vit_dms_web/index', auth='public',website=True)
@@ -40,7 +43,8 @@ class VitDmsWeb(http.Controller):
                 'name': dir['name'],
                 'state': 'closed',
                 'parentId': str(directory_id),
-                'type': 'directory'
+                'type': 'directory',
+                'size' : dir['size']
             })
         for file in files:
             data.append({
@@ -49,9 +53,11 @@ class VitDmsWeb(http.Controller):
                 'state': 'open',
                 'parentId': str(directory_id),
                 'type': 'file',
+                'size' : file['size']
             })
 
         return simplejson.dumps(data)
+
 
     ##### review API
     @http.route('/vit_dms_web/reviews/read/<int:file_id>', auth='public', csrf=False)
@@ -67,7 +73,8 @@ class VitDmsWeb(http.Controller):
         isNewRecord = kw.get('isNewRecord')
         ulas = kw.get('ulas')
         name = kw.get('name')
-        tanggal_jam = kw.get('tanggal_jam')
+        tanggal_jam = str(kw.get('tanggal_jam')) # merubah tanggal jadi str
+        tanggal_jam = datetime.datetime.strptime(tanggal_jam[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         redaksi_asal = kw.get('redaksi_asal')
 
         data = {
@@ -87,7 +94,8 @@ class VitDmsWeb(http.Controller):
         isNewRecord = kw.get('isNewRecord')
         ulas = kw.get('ulas')
         name = kw.get('name')
-        tanggal_jam = kw.get('tanggal_jam')
+        tanggal_jam = str(kw.get('tanggal_jam')) # merubah tanggal jadi str
+        tanggal_jam = datetime.datetime.strptime(tanggal_jam[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         redaksi_asal = kw.get('redaksi_asal')
         id = kw.get('id')
 
@@ -121,7 +129,8 @@ class VitDmsWeb(http.Controller):
         print kw
         isNewRecord = kw.get('isNewRecord')
         name = kw.get('name')
-        tanggal_naskah = kw.get('tanggal_naskah')
+        tanggal_naskah = str(kw.get('tanggal_naskah')) # merubah tanggal jadi str
+        tanggal_naskah = datetime.datetime.strptime(tanggal_naskah[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         partner = kw.get('partner')
         deskripsi = kw.get('deskripsi')
 
@@ -141,7 +150,8 @@ class VitDmsWeb(http.Controller):
         print kw
         isNewRecord = kw.get('isNewRecord')
         name = kw.get('name')
-        tanggal_naskah = kw.get('tanggal_naskah')
+        tanggal_naskah = str(kw.get('tanggal_naskah')) # merubah tanggal jadi str
+        tanggal_naskah = datetime.datetime.strptime(tanggal_naskah[0:10], '%m/%d/%Y').strftime('%d/%m/%Y') # merubah format tanggal
         partner = kw.get('partner')
         deskripsi = kw.get('deskripsi')
         id = kw.get('id')
@@ -177,4 +187,3 @@ class VitDmsWeb(http.Controller):
     def get_partner(self):
         partners = http.request.env['res.partner'].search_read([], fields=['id','name','display_name'])
         return simplejson.dumps(partners)
-

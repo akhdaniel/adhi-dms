@@ -33,7 +33,7 @@ class muk_dms_review(models.Model):
 	_name = 'muk_dms.review'
 
 	name = fields.Char(string="Bookmark",)
-	tanggal_jam = fields.Datetime(string="Tanggal/ Jam", default=lambda self: time.strftime("%Y-%m-%d"))
+	tanggal_jam = fields.Date(string="Tanggal Jam", default=lambda self: time.strftime("%Y-%m-%d"))
 	redaksi_asal = fields.Char(string="Redaksi Asal",)
 	ulas = fields.Char(string="Ulasan",)
 	file_id = fields.Many2one(comodel_name='muk_dms.file', string='File')
@@ -44,16 +44,13 @@ class muk_dms_reviewer(models.Model):
 
 	name = fields.Many2one(comodel_name="res.users", string="User", required=False,
 							default=lambda self: self.env.user.id)
-	state = fields.Selection(string="State", selection=SESSION_STATES, required=False, default='draft' )
-	date = fields.Date(string="Review Date", required=False, default=fields.Datetime.now() )
-
 	file_id = fields.Many2one(comodel_name='muk_dms.file', string='Reviewer')
 
 class muk_dms_info(models.Model):
 	_name = 'muk_dms.info'
 
-	name 			= fields.Char(string="Nomor Naskah")
-	tanggal_naskah 	= fields.Date(string="Tanggal Naskah", default=lambda self: time.strftime("%Y-%m-%d"))
-	partner 		= fields.Many2one(comodel_name="res.partner", string="Partner")
-	deskripsi 		= fields.Char(string="Deskripsi Naskah")
-	file_id 		= fields.Many2one(comodel_name='muk_dms.file', string='File')
+	name = fields.Char(string="Nomor Naskah")
+	tanggal_naskah = fields.Date(string="Tanggal Naskah", default=lambda self: time.strftime("%Y-%m-%d"))
+	partner = fields.Many2one(comodel_name="res.partner", string="Redaksi Asal")
+	deskripsi = fields.Char(string="Deskripsi Naskah")
+	file_id = fields.Many2one(comodel_name='muk_dms.file', string='File')
