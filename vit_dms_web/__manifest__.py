@@ -21,10 +21,15 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base',
+                'vit_muk_dms',
                 'website',
                 'muk_dms',
-                'vit_muk_dms',
-                'muk_web_preview'],
+                'muk_web_preview',
+                'muk_dms_file',
+                'muk_web_client',
+                'muk_web_view_hierarchy',
+                'muk_web_client_refresh',
+        ],
 
     # always loaded
     'data': [
