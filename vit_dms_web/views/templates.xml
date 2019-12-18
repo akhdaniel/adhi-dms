@@ -27,7 +27,14 @@
          </template>
 
         <template id="vit_dms_web.file_browser">
-             <table id="tt" class="easyui-treegrid" style="width:100%;height:auto"
+            <div>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-refresh" plain="true" onclick="javascript:$('#tt').treegrid('reload')">Reload</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-collapse" plain="true" onclick="javascript:$('#tt').treegrid('collapseAll')">CollapseAll</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-expand" plain="true" onclick="javascript:$('#tt').treegrid('expandAll')">ExpandAll</a>
+                <!--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-expand" onclick="javascript:$('#tt').treegrid('expandTo')">ExpandTo</a>-->
+            </div>
+
+            <table id="tt" class="easyui-treegrid" style="width:100%;height:auto"
                     data-options="
                         url: '/vit_dms_web/directories',
                         method: 'get',
@@ -43,8 +50,8 @@
                         <th data-options="field:'file_state'" width="150">State</th>
                      </tr>
                  </thead>
-             </table>
-             <script>
+            </table>
+            <script>
                  function onClickRow(node){
                     selectedFileId = node.id;
                      
@@ -71,8 +78,8 @@
                     var src = '/vit_dms_web/static/src/js/ViewerJS/index.html#/web/content?model=muk_dms.file&amp;field=content&amp;id=' + node.id ;
                     $('#viewer').attr('src', src);
                  }
-             </script>
-         </template>
+            </script>
+        </template>
 
         <template id="vit_dms_web.file_preview">
             <iframe id="viewer" src="" width='100%' height='500' allowfullscreen="1" webkitallowfullscreen="1"></iframe>
@@ -120,9 +127,15 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="javascript:action_review_done()">Done</a>
             </div>
             <script type="text/javascript">
+
+
                 $(function(){
                     $('#dg_review').edatagrid({
-
+                        autoSave: true,
+                        onSuccess: function(index, row){
+                            $('#dg_review').datagrid('reload');    // reload the review grid
+                            $('#tt').treegrid('reload');    // reload the file browser
+                        }
                     });
                 });
 
@@ -145,6 +158,8 @@
                         });
                     }
                 }
+
+
             </script>
         </template>
 
