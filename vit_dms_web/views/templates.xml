@@ -31,7 +31,6 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-refresh" plain="true" onclick="javascript:$('#tt').treegrid('reload')">Reload</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-collapse" plain="true" onclick="javascript:$('#tt').treegrid('collapseAll')">CollapseAll</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-expand" plain="true" onclick="javascript:$('#tt').treegrid('expandAll')">ExpandAll</a>
-                <!--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-expand" onclick="javascript:$('#tt').treegrid('expandTo')">ExpandTo</a>-->
             </div>
 
             <table id="tt" class="easyui-treegrid" style="width:100%;height:auto"
@@ -135,6 +134,7 @@
                         onSuccess: function(index, row){
                             $('#dg_review').datagrid('reload');    // reload the review grid
                             $('#tt').treegrid('reload');    // reload the file browser
+                            $('#tt').treegrid('expandTo', selectedFileId).treegrid('select',selectedFileId);
                         }
                     });
                 });
@@ -147,6 +147,8 @@
                                     if (result.success){
                                         $('#dg_review').datagrid('reload');    // reload the review grid
                                         $('#tt').treegrid('reload');    // reload the file browser
+                                        $('#tt').treegrid('expandTo', selectedFileId).treegrid('select',selectedFileId);
+
                                     } else {
                                         $.messager.show({    // show error message
                                             title: 'Error',
