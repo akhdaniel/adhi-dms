@@ -124,17 +124,6 @@ class VitDmsWeb(http.Controller):
         for rev in reviews:
             rev.state = 'done'
 
-
-        ### cek jika semua reviews state == done , maka file state = done
-        reviews = http.request.env['muk_dms.review'].search([('file_id', '=', file_id)])
-        file_state = 'done'
-        for rev in reviews:
-            if rev.state != 'done':
-                file_state = 'progress'
-                break
-
-        http.request.env['muk_dms.file'].browse(file_id).state=file_state
-
         return simplejson.dumps({'success': True})
 
     @http.route('/vit_dms_web/reviews/delete/<int:file_id>', auth='public', csrf=False)

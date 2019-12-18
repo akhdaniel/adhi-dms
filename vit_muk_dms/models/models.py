@@ -16,10 +16,24 @@ class muk_dms(models.Model):
 			('Done', 'Done')])
 	state = fields.Selection(selection=STATES, string="State", required=False,
 						readonly=True,
-						default=STATES[0][0], help="")
+						compute="_get_state", help="")
 	review_ids = fields.One2many('muk_dms.review','file_id', string='Review')
 	reviewer_ids = fields.One2many('muk_dms.reviewer','file_id', string='Reviewer')
 	info_ids = fields.One2many('muk_dms.info','file_id', string='Info')
+
+
+	@api.depends('review_ids')
+	def _get_state(self):
+		for rec in self:
+			if not rec.review_ids:
+				final_state='draft'
+			else:
+				final_state = 'done'
+				for review in rec.review_ids:
+					if review.state != 'done':
+						final_state = 'progress'
+
+			rec.state = final_state
 
 	@api.multi
 	def action_draft(self):
