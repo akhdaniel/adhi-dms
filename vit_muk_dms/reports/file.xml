@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    	<!-- menu report -->
+        <report 
+            id="report_file_menu"
+            string="File dan Review"
+            model="muk_dms.file" 
+            report_type="qweb-pdf"
+            file="vit_muk_dms.file"
+            name="vit_muk_dms.file_report"
+        />
+
+        <!-- template utk semua yg diprint -->
+        <template id="vit_muk_dms.file_report">
+		    <t t-call="report.html_container">
+		        <t t-foreach="docs" t-as="doc">
+		            <t t-call="vit_muk_dms.file_report_document"/>
+		        </t>
+		    </t>
+		</template>
+
+		<!-- template 1 halaman -->
+		<template id="vit_muk_dms.file_report_document">
+		    <t t-call="report.external_layout">
+		        <!--<t t-set="doc" t-value="doc.with_context({'lang':doc.instructor_id.lang})" />-->
+		        <div class="page">
+
+		            <div class="oe_structure"/>
+					<br/>
+					<br/>
+					<br/>
+					<br/>
+
+		            <h4>
+		                FILE: <span t-field="doc.name"/><br/>
+						Tanggal:
+		            </h4>
+
+
+					<t t-set="i" t-value="1"/>
+
+		            <table class="table table-condensed">
+		                <thead>
+		                    <tr>
+		                        <th>No</th>
+		                        <th>Name</th>
+		                        <th>Tanggal Jam</th>
+		                        <th>Redaksi Asal</th>
+		                        <th>Ulasan</th>
+		                        <th>Reviewer</th>
+		                        <th>Status</th>
+		                    </tr>
+		               </thead>
+
+		               <tbody>
+		                    <tr t-foreach="doc.review_ids" t-as="review">
+		                        <td>
+		                           	<t t-raw="i"/>
+									<t t-set="i" t-value="i+1"/>
+		                        </td>
+		 
+		                        <td>
+		                            <span t-field="review.name" />
+		                        </td>
+		                        <td>
+		                            <span t-field="review.tanggal_jam" />
+		                        </td>
+		                        <td>
+		                            <span t-field="review.redaksi_asal" />
+		                        </td>
+		                        <td>
+		                            <span t-field="review.ulas" />
+		                        </td>
+		                        <td>
+		                            <span t-field="review.user_id" />
+		                        </td>
+		                        <td>
+		                            <span t-field="review.state" />
+		                        </td>
+
+		                    </tr>
+		                </tbody>
+		            </table>
+
+		            <div class="oe_structure"/>
+		        </div>
+		    </t>
+		</template>
+
+
+	</data>
+</openerp>
