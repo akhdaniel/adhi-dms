@@ -53,7 +53,9 @@
             <script>
                  function onClickRow(node){
                     selectedFileId = node.id;
-                     
+
+                    var src = '/vit_dms_web/static/src/js/ViewerJS/index.html#/web/content?model=muk_dms.file&amp;field=content&amp;id=' + node.id ;
+                    $('#viewer').attr('src', src);
                     $('iframe').each(function() {
                       this.contentWindow.location.reload(true);
                     });
