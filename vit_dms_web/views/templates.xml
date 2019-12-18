@@ -197,7 +197,6 @@
                     <tr>
                         <th data-options="field:'name'">Reviewer</th>
                         <th data-options="field:'state',width:100">Status</th>
-                        <th data-options="field:'date'">Review Date</th>
                     </tr>
                 </thead>
             </table>

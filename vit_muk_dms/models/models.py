@@ -24,6 +24,12 @@ class muk_dms(models.Model):
 
 	@api.depends('review_ids')
 	def _get_state(self):
+		"""
+		jika belum ada review => state = draft
+		jika sudah ada review => state = progress
+		jika semua review done => state = done
+		:return:
+		"""
 		for rec in self:
 			if not rec.review_ids:
 				final_state='draft'
@@ -57,19 +63,32 @@ class muk_dms_review(models.Model):
 class muk_dms_reviewer(models.Model):
 	_name = 'muk_dms.reviewer'
 
-	name = fields.Many2one(comodel_name="res.users", string="User", required=False,
-							default=lambda self: self.env.user.id)
+	name = fields.Many2one(comodel_name="res.users", string="User", required=False, default=lambda self: self.env.user.id)
 	file_id = fields.Many2one(comodel_name='muk_dms.file', string='File')
 	state = fields.Char(string="State", compute="_get_state")
 
 	@api.depends('file_id')
 	def _get_state(self):
+		"""
+		state per masing-masing user reviewer
+
+		jika belum melakukan review => state = draft
+		jika sudah ada review => state = progress
+		jika semua review done => state = done
+
+		diambil dari muk_dms.file yang dilakukan oleh user_id
+
+		:return:
+		"""
 		for rec in self:
-			final_state = 'done'
-			for review in rec.file_id.review_ids:
-				if review.state != 'done':
-					final_state = 'progress'
-					break
+
+			if not rec.file_id.review_ids:
+				final_state = 'draft'
+			else:
+				final_state = 'done'
+				for review in rec.file_id.review_ids:
+					if review.state != 'done' and review.user_id == rec.name:
+						final_state = 'progress'
 
 			rec.state = final_state
 
