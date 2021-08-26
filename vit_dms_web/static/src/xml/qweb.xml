@@ -1,0 +1,9 @@
+<template>
+    <t t-extend="muk_dms.DMSTreeView">
+        <t t-jquery="div.o_list_buttons" t-operation="inside">
+            <button accesskey="D" class="create_file btn btn-sm btn-default" type="button">
+                Create File
+            </button>
+        </t>
+    </t>
+</template>

@@ -37,10 +37,13 @@
         'views/asset.xml',
         'views/views.xml',
         'views/templates.xml',
-        'data/web_menu.xml',
+        # 'data/web_menu.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
+    'qweb': [
+        'static/src/xml/*'
+    ]
 }
